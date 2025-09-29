@@ -1,0 +1,5 @@
+# Exclude auto-generated/vendor code from language stats
+android/** linguist-vendored
+ios/** linguist-vendored
+build/** linguist-vendored
+node_modules/** linguist-vendored
