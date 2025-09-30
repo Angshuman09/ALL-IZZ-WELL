@@ -1,8 +1,8 @@
 import express from 'express';
-import { adminAuthController, getAdminsDataController, getStudentsDataController } from '../../controllers/admins/auth.controller.js';
+import { adminLoginController, adminRegisterController, adminLogoutController } from '../../controllers/admins/auth.controller.js';
 const router = express.Router();
 
-router.post('/admin/login', adminAuthController);
-router.get('/admin/getadminData', getAdminsDataController);
-router.get('/admin/getStudentsData', getStudentsDataController);
+router.post('/admin/login', adminLoginController);
+router.post('admin/register',adminRegisterController);
+router.post('/admin/logout', adminLogoutController)
 export default router;

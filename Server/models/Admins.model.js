@@ -28,6 +28,13 @@ const adminSchema = new mongoose.Schema({
     required: true
   },
 
+  phoneNumber:{
+    type: String,
+    required: function(){
+      return this.role === 'admin';
+    }
+  },
+
   collegeId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'College',
@@ -36,14 +43,13 @@ const adminSchema = new mongoose.Schema({
     }
   },
 
-  createdBy: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Admin',
-    required: function() {
+  approved:{
+    type:Boolean,
+    default:false,
+    required: function(){
       return this.role === 'admin';
     }
   },
-
 }, {
   timestamps: true
 });

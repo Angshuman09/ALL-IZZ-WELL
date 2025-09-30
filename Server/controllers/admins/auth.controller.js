@@ -1,6 +1,8 @@
 import { Admin } from "../../models/Admins.model.js";
 import jwt from 'jsonwebtoken';
-export const adminAuthController = async (req, res)=>{
+import parsePhoneNumber from 'libphonenumber-js';
+
+export const adminLoginController = async (req, res)=>{
    try {
     const {username, password} = req.body;
     if(!username || !password) return res.status(401).json({error: "Username and Password is required"});
@@ -14,6 +16,10 @@ export const adminAuthController = async (req, res)=>{
 
     if(!isMatch){
         return res.status(404).json({error: "Password not matched"});
+    }
+
+    if(admin.role === 'admin' && !admin.approved){
+        return res.status(401).json({error: "Your are not approved"});
     }
 
     const token = jwt.sign({adminId: admin._id}, process.env.JWT_SECRET_KEY,{
@@ -33,13 +39,54 @@ export const adminAuthController = async (req, res)=>{
 
    } catch (error) {
     console.log(`error in adminAuthController: ${error}`);
+    res.status(500).json({error:`error in adminAuthController: ${error}`})
    }
 }
 
-export const getAdminsDataController = async (req, res)=>{
-    res.json({message: "will working"})
+export const adminRegisterController = async (req, res)=>{
+   try {
+     const {email, password, phoneNumber}= req.body;
+ 
+     if(!email || !password || !phoneNumber || !college){
+        return res.status(401).json({error: "Fields are required"});
+     }
+
+     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+     if(!emailRegex(email)){
+        return res.status(401).json({error: "Email is not valid!"});
+     }
+
+     if(password.length<6){
+        return res.status(401).json({error: "Password must be atleast of 6 characters"});
+     }
+
+     const phonenumber = parsePhoneNumber(phoneNumber);
+
+     if(!phonenumber.isValid){
+        return res.status(401).json({error: "Phone number is not valid"});
+     }
+
+
+     const admin = await Admin.create({
+        email, password, phoneNumber
+     })
+     
+     //work in progress
+
+
+   } catch (error) {
+    console.log(`error in adminAuthController: ${error}`);
+    res.status(500).json({error:`error in adminAuthController: ${error}`})
+   }
 }
 
-export const getStudentsDataController = async (req, res)=>{
-    res.json({message: "will working"})
+export const adminLogoutController = async (req, res)=>{
+    try {
+        res.cookies('token','',{maxAge: 0});
+        res.status(200).json({success: true, message: "Admin Logout successfully"});
+    } catch (error) {
+    console.log(`error in adminLogoutController: ${error}`);
+    res.status(500).json({error:`error in adminLogoutController: ${error}`})
+    }
 }

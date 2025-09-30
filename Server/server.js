@@ -14,6 +14,7 @@ app.use(express.urlencoded({extended: true}));
 const PORT = process.env.PORT || 4000;
 
 app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/dashboards', dashboardRoutes);
 
 app.listen(PORT, ()=>{
     db()

@@ -7,6 +7,7 @@ const collegeSchema = new mongoose.Schema({
     unique: true,
     trim: true
   },
+
   collegeCode: {
     type: String,
     required: true,
@@ -15,36 +16,31 @@ const collegeSchema = new mongoose.Schema({
     minlength: 3,
     maxlength: 10
   },
+  
   adminId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Admin',
     required: true
   },
- 
-  contactInfo: {
-    phone: String,
-    email: String,
-    website: String
-  },
+
   establishedYear: {
     type: Number,
     min: 1800,
     max: new Date().getFullYear()
   },
+
   collegeType: {
     type: String,
     enum: ['government', 'private', 'autonomous'],
     default: 'private'
   },
+
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Admin',
     required: true
   },
-  isActive: {
-    type: Boolean,
-    default: true
-  }
+
 }, {
   timestamps: true
 });
